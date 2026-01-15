@@ -22,9 +22,9 @@ const Header = () => {
         </Link>
 
         <nav className="flex gap-24 font font-medium">
-          <Link href="#hero-section" className="relative after:content-[''] after:block after:bg-primary after:rounded-full after:h-[3px] after:w-1/2 after:absolute after:left-1/2 after:-translate-x-1/2 after:translate-y-1">Home</Link>
-          <Link href="#categoriey-section">Category</Link>
-          <Link href="#products-section">Explore Products</Link>
+          <Link href="#hero-section" className="relative after:content-[''] after:block after:bg-primary after:rounded-full after:h-[3px] after:w-1/2 after:absolute after:left-1/2 after:-translate-x-1/2 after:translate-y-1">RHC</Link>
+          <Link href="#categoriey-section">Layanan Kami</Link>
+          <Link href="#products-section">Temukan Perawatan yang Tepat</Link>
         </nav>
 
         {/* <div className="relative flex gap-10">
