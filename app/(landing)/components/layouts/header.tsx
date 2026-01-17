@@ -1,47 +1,80 @@
 "use client";
 
-import Link from "next/dist/client/link";
+import Link from "next/link";
 import Image from "next/image";
-// import { FiSearch, FiShoppingBag } from "react-icons/fi";
-// import CartPopup from "../ui/cart-popup";
-import { use, useState } from "react";
+import { FiSearch, FiShoppingBag } from "react-icons/fi";
+import CartPopup from "../ui/cart-popup"
+import { useState } from "react";
+// import { useCartStore } from "@/app/hooks/use-cart-store";
 
 const Header = () => {
+  // const { items } = useCartStore();
   const [isCartPopupOpen, setIsCartPopupOpen] = useState(false);
 
   return (
-   <header>
-      <div className="flex justify-between gap-10 container mx-auto py-7">
-        <Link href="/">
-        <Image 
-          src = "/images/logorhc.png"
-          alt="rhc logo"
-          width={127}
-          height={30}
-        />
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-rose-100">
+      <div className="container mx-auto flex items-center justify-between py-5">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/images/logo-rhc.png"
+            alt="Rizqiya Home Care"
+            width={127}
+            height={30}
+            priority
+          />
         </Link>
 
-        <nav className="flex gap-24 font font-medium">
-          <Link href="#hero-section" className="relative after:content-[''] after:block after:bg-primary after:rounded-full after:h-[3px] after:w-1/2 after:absolute after:left-1/2 after:-translate-x-1/2 after:translate-y-1">RHC</Link>
-          <Link href="#categoriey-section">Layanan Kami</Link>
-          <Link href="#products-section">Temukan Perawatan yang Tepat</Link>
-        </nav>
+        {/* Navigation */}
+        <nav className="hidden md:flex items-center gap-16 text-sm font-medium">
+          <Link
+            href="#rhc-section"
+            className="relative text-primary after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-[3px] after:w-1/2 after:rounded-full after:bg-primary"
+          >
+            RHC
+          </Link>
 
-        {/* <div className="relative flex gap-10">
+          <Link
+            href="#category-section"
+            className="text-gray-700 hover:text-primary transition"
+          >
+            Layanan Kami
+          </Link>
+
+          <Link
+            href="#products-section"
+            className="text-gray-700 hover:text-primary transition"
+          >
+            Temukan Perawatan yang Tepat
+          </Link>
+        </nav>
+        <div className="relative flex gap-10">
           <FiSearch size={24} />
           <button
             className="relative cursor-pointer"
             onClick={() => setIsCartPopupOpen(!isCartPopupOpen)}
           >
-            <FiShoppingBag size={24} />
-            <div className="bg-primary rounded-full w-3.5 h-3.5 absolute -top-1 -right-1 text-[10px] text-white text-center">
-              3
-            </div>
+            {/* <FiShoppingBag size={24} />
+            {items.length ? (
+              <div className="bg-primary rounded-full w-3.5 h-3.5 absolute -top-1 -right-1 text-[10px] text-white text-center">
+                {items.length}
+              </div>
+            ) : (
+              <></>
+            )} */}
           </button>
           {isCartPopupOpen && <CartPopup />}
-        </div> */}
+        </div>
+
+        {/* Mobile hint (optional placeholder) */}
+        <div className="md:hidden text-sm font-medium text-primary">
+          Menu
+        </div>
       </div>
-   </header> 
-  )
-}
+      {/* Accent strip */}
+      <div className="h-[2px] bg-gradient-to-r from-transparent via-rose-300 to-transparent" />
+    </header>
+  );
+};
+
 export default Header;

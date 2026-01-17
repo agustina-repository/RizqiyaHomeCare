@@ -7,7 +7,7 @@ const FooterSection = () => {
 <div className="container mx-auto flex justify-between pt-14 pb-24">
         <div className="w-105">
           <Image
-            src="/images/logorhc.png"
+            src="/images/logo-rhc.png"
             alt="logo rhc footer"
             width={187}
             height={44}
