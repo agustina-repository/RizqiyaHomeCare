@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { FiArrowRight } from "react-icons/fi";
 import Image from "next/image";
 
 const categoryList = [
@@ -14,7 +13,7 @@ const categoryList = [
     imgUrl: "perawatan-ibu.png",
   },
   {
-    name: "Pijat Bayi & Anak",
+    name: "Pijat Bayi dan Anak",
     imgUrl: "pijat-bayi-dan-anak.png",
   },
   {
@@ -23,15 +22,16 @@ const categoryList = [
   },
 ];
 
+const toSlug = (text: string) =>
+  text.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-");
+
 const CategorySection = () => {
   return (
     <section id="category-section" className="container mx-auto pb-20">
-      {/* HEADER */}
       <div className="flex justify-between items-center">
-        <h2 className="font-bold text-2xl">Layanan Kami</h2>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Layanan Kami</h2>
       </div>
 
-      {/* GRID CENTER */}
       <div className="mt-10 flex justify-center">
         <div className="grid grid-cols-4 gap-12">
           {categoryList.map((category, index) => (
@@ -42,13 +42,16 @@ const CategorySection = () => {
                          flex items-center justify-center"
             >
               <div className="flex flex-col items-center text-center">
-                <Image
-                  src={`/images/categories/${category.imgUrl}`}
-                  width={86}
-                  height={86}
-                  alt={category.name}
-                  className="mb-3"
-                />
+                <Link href={`/product/${toSlug(category.name)}`}>
+                  <Image
+                    src={`/images/categories/${category.imgUrl}`}
+                    width={86}
+                    height={86}
+                    alt={category.name}
+                    className="mb-3 cursor-pointer hover:scale-110 transition"
+                  />
+                </Link>
+
                 <div className="text-primary font-medium text-lg">
                   {category.name}
                 </div>
