@@ -9,7 +9,7 @@ const HeroSection = () => {
             Selamat Datang di
           </span>
           <h1 className="
-            font-extrabold text-[clamp(120px,10vw,90px)]
+            font-extrabold text-[clamp(110px,10vw,90px)]
             leading-[0.9] tracking-tighter mb-4 w-full md:whitespace-nowrap">
             Rizqiya <span className="text-primary">Home Care</span>
           </h1>

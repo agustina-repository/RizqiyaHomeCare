@@ -174,7 +174,7 @@ export const productData: Product[] = [
       {
         slug: "pijat-laktasi",
         title: "Pijat Laktasi",
-        image: "/images/packages/pijat-laktasi.png",
+        image: "/images/packages/pijat laktasi.png",
         description: (
           <>
             Perawatan awal untuk menstimulasi hormon oksitosin dan prolaktin yang
@@ -212,7 +212,7 @@ export const productData: Product[] = [
       {
         slug: "payudara-tersumbat",
         title: "Payudara Tersumbat",
-        image: "/images/packages/payudara-tersumbat.png",
+        image: "/images/packages/payudara tersumbat.png",
         description: (
           <>
             Perawatan khusus yang diberikan kepada ibu menyusui yang mengalami

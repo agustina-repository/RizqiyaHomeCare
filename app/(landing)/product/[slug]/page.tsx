@@ -21,8 +21,6 @@ const ProductDetail = async ({ params }: ProductDetailProps) => {
   return (
     <main className="min-h-screen bg-gray-100">
       <div className="container mx-auto py-32 px-4">
-
-        {/* ================= HEADER ================= */}
         <div className="flex flex-col lg:flex-row gap-12 mb-20">
           <div className="bg-primary-light aspect-square w-full lg:min-w-[520px] flex justify-center items-center rounded-2xl">
             <Image
@@ -80,19 +78,16 @@ const ProductDetail = async ({ params }: ProductDetailProps) => {
                     </div>
                   )}
 
-                  {/* PACKAGE TITLE */}
                   <h3 className="text-2xl font-semibold mb-3">
                     {pkg.title}
                   </h3>
 
-                  {/* PACKAGE DESCRIPTION */}
                   {pkg.description && (
                     <div className="text-gray-600 mb-6 leading-loose">
                       {pkg.description}
                     </div>
                   )}
-
-                  {/* VARIANTS */}
+                  
                   <h4 className="font-semibold text-lg mb-4">
                     Informasi Paket
                   </h4>

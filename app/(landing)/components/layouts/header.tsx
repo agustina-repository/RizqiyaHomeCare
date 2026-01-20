@@ -23,23 +23,22 @@ const Header = () => {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-          <Link href="#rhc-section"
+          <Link href="/#rhc-section"
             className="relative text-primary after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-[3px] after:w-1/2 after:rounded-full after:bg-primary">
             RHC
           </Link>
 
-          <Link href="#category-section"
+          <Link href="/#category-section"
             className="text-gray-700 hover:text-primary transition">
             Layanan Kami
           </Link>
 
-          <Link href="#testimonial-section"
+          <Link href="/#testimonial-section"
             className="text-gray-700 hover:text-primary transition">
             Suara Mereka
           </Link>
         </nav>
 
-        {/* Icons */}
         <div className="relative flex items-center gap-4 md:gap-6">
           <FiSearch size={24} />
           <button
@@ -50,9 +49,18 @@ const Header = () => {
           {isCartPopupOpen && <CartPopup />}
         </div>
 
-        {/* Mobile Menu */}
-        <div className="md:hidden text-sm font-medium text-primary">
-          Menu
+        {/* ================= MOBILE MENU ================= */}
+
+        <div className="md:hidden">
+          <select 
+            onChange={(e) => window.location.href = e.target.value}
+            className="bg-rose-50 text-primary text-xs font-bold py-1 px-2 rounded-lg border-none outline-none"
+          >
+            <option value="">Menu</option>
+            <option value="/#rhc-section">RHC</option>
+            <option value="/#category-section">Layanan</option>
+            <option value="/#testimonial-section">Suara Mereka</option>
+          </select>
         </div>
       </div>
 

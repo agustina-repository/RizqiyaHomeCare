@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";   
 
 const FooterSection = () => {
-    const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
     const instagramUser = process.env.NEXT_PUBLIC_INSTAGRAM_ACCOUNT;
 
   return (
@@ -35,7 +34,9 @@ const FooterSection = () => {
       </div>
       <div className="border-t border-t-white/15">
         <div className="container mx-auto py-6.5 flex justify-between">
-          <div>Rizqiya Home Care © 2025 All Rights Reserverd.</div>
+          <div>Rizqiya Home Care © 2025 All Rights Reserverd.
+            <span className="text-gray-500"> Built by Amanah Tech</span>
+          </div>
 
           <div className="grid grid-cols-2 w-105">
             <Link href="#">Privacy Policy</Link>
