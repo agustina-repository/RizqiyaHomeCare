@@ -35,7 +35,7 @@ const Header = () => {
 
           <Link href="/#testimonial-section"
             className="text-gray-700 hover:text-primary transition">
-            Suara Mereka
+            Apa Kata Mereka
           </Link>
         </nav>
 
