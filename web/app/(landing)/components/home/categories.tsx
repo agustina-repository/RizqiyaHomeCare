@@ -15,6 +15,16 @@ const categoryList = [
     desc: "Layanan pemulihan pasca melahirkan untuk kebugaran bunda." 
   },
   { 
+    name: "Perawatan Bayi", 
+    imgUrl: "perawatan-bayi.png",
+    desc: "Perawatan lengkap yang dirancang untuk mendukung kenyamanan bayi." 
+  },
+  { 
+    name: "Perawatan Bayi Baru Lahir", 
+    imgUrl: "newborn care.png",
+    desc: "Perawatan intensif untuk bayi baru lahir." 
+  },
+  { 
     name: "Pijat Bayi dan Anak", 
     imgUrl: "pijat-bayi-dan-anak.png",
     desc: "Sentuhan lembut untuk stimulasi tumbuh kembang si kecil secara optimal." 
@@ -31,13 +41,13 @@ const toSlug = (text: string) =>
 
 const CategorySection = () => {
   return (
-    <section id="category-section" className="container mx-auto pb-20 px-4">
+    <section id="category-section" className="container mx-auto pb-20 px-4 scroll-mt-128">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Layanan Kami</h2>
       </div>
 
       <div className="mt-10 flex justify-center">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-10 w-full max-w-6xl">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-10 w-full max-w-6xl">
           {categoryList.map((category, index) => (
             <Link 
               key={index} 

@@ -6,7 +6,7 @@ import Footer from "./(landing)/components/layouts/footer"
 
 const poppins = Poppins({
   variable: "--font-poppins",
-  subsets: ["latin"], // Tambahkan subsets agar tidak error
+  subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700", "800"]
 });
@@ -35,8 +35,6 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
-
-// HAPUS BARIS <meta> YANG ADA DI SINI SEBELUMNYA!
 
 export default function RootLayout({
   children,

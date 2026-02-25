@@ -2,50 +2,67 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FiSearch, FiShoppingBag } from "react-icons/fi";
-import CartPopup from "../ui/cart-popup"
 import { useState } from "react";
+import { motion } from "framer-motion";
+import CartPopup from "../ui/cart-popup"
 
 const Header = () => {
+  const [activeTab, setActiveTab] = useState("RHC");
   const [isCartPopupOpen, setIsCartPopupOpen] = useState(false);
+
+  const navItems = [
+    { name: "RHC", href: "/#rhc-section" },
+    { name: "Layanan", href: "/#category-section" },
+    { name: "Ruang Edukasi", href: "/#edukasi" },
+    { name: "Legalistas", href: "/#legal" },
+    { name: "Testimoni", href: "/#vip" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-rose-100 w-full">
-      <div className="flex items-center justify-between px-4 md:px-8 py-3 md:py-5">
+      <div className="flex items-center justify-between px-4 md:px-8 py-0 md:py-0">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/images/logo-rhc.png"
+            src="/images/header-img.png"
             alt="Rizqiya Home Care"
             width={127}
             height={30}
+            className="h-5 md:h-4 w-auto object-contain"
             priority
           />
         </Link>
-
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-          <Link href="/#rhc-section"
-            className="relative text-primary after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-[3px] after:w-1/2 after:rounded-full after:bg-primary">
-            RHC
-          </Link>
-
-          <Link href="/#category-section"
-            className="text-gray-700 hover:text-primary transition">
-            Layanan Kami
-          </Link>
-
-          <Link href="/#edukasi"
-            className="text-gray-700 hover:text-primary transition">
-            Ruang Edukasi
-          </Link>
-
-          <Link href="/#testimonial-section"
-            className="text-gray-700 hover:text-primary transition">
-            Apa Kata Mereka
-          </Link>
+        
+        <nav className="hidden md:flex items-center gap-2 bg-rose-50/50 p-1.5 rounded-2xl">
+          {navItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={() => setActiveTab(item.name)}
+              className="relative px-6 py-2.5 transition-all duration-300"
+            >
+              <span className={`relative z-10 font-bold transition-colors duration-300 ${
+                activeTab === item.name ? "text-white" : "text-gray-600 hover:text-primary"
+                }`}>
+                  {item.name}
+              </span>
+              
+              {activeTab === item.name && (
+                <motion.div
+                layoutId="activeNavigationBox"
+                className="absolute inset-0 bg-primary rounded-xl shadow-lg shadow-orange-200"
+                initial={false}
+                transition={{ 
+                  type: "spring", 
+                  stiffness: 400, 
+                  damping: 30 
+                }}
+              />)}
+            </Link>
+          ))}
         </nav>
 
         <div className="relative flex items-center gap-4 md:gap-6">
-          <FiSearch size={24} />
+        
           <button
             className="relative cursor-pointer"
             onClick={() => setIsCartPopupOpen(!isCartPopupOpen)}

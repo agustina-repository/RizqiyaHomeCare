@@ -5,7 +5,6 @@ export const generateWhatsAppLink = (
   variantName: string,
   price: number
 ) => {
-  // Mengambil nomor dari .env
   const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
   
   if (!phoneNumber) {
@@ -18,6 +17,6 @@ export const generateWhatsAppLink = (
     `*Harga:* ${priceFormatter(price)}\n\n` +
     `Mohon info detailnya. Terima kasih!`;
 
-  // EncodeURIComponent memastikan karakter seperti spasi dan enter terbaca di URL
+
   return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 };

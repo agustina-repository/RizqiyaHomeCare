@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { productData } from "../data";
-import BookingModal from "../../components/booking-modal";
+import BookingModal from "../../components/booking/booking-modal";
 
 type ProductDetailProps = {
   params: Promise<{
@@ -28,7 +28,7 @@ const ProductDetail = async ({ params }: ProductDetailProps) => {
               width={520}
               height={520}
               alt={product.title}
-              className="object-contain w-full h-full"
+              className="min-w-full min-h-full object-cover"
               priority
             />
           </div>
@@ -65,7 +65,6 @@ const ProductDetail = async ({ params }: ProductDetailProps) => {
                   key={pkg.slug}
                   className="bg-white rounded-2xl p-8 shadow hover:shadow-lg transition"
                 >
-                  {/* PACKAGE IMAGE (OPTIONAL) */}
                   {pkg.image && (
                     <div className="bg-primary-light aspect-square flex justify-center items-center mb-6 rounded-xl">
                       <Image
