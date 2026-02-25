@@ -1,15 +1,15 @@
 import {defineCliConfig} from 'sanity/cli'
 
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID! || process.env.SANITY_STUDIO_PROJECT_ID || '';
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET! || process.env.SANITY_STUDIO_DATASET || '';
+
 export default defineCliConfig({
   api: {
-    projectId: 'yn0aoz34',
-    dataset: 'production'
+    projectId: projectId,
+    dataset: dataset
   },
   deployment: {
-    /**
-     * Enable auto-updates for studios.
-     * Learn more at https://www.sanity.io/docs/studio/latest-version-of-sanity#k47faf43faf56
-     */
+    appId: 'nv8xbdkg9afrxqbhptqvw4my',
     autoUpdates: true,
   }
 })
