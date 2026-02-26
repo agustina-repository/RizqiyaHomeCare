@@ -6,14 +6,14 @@ import { Navigation, Pagination, A11y } from "swiper/modules";
 import { urlFor } from "@/lib/sanity/client";
 import { Lock, X, Loader2, Mail, CheckCircle } from "lucide-react";
 import { zipSync } from "fflate";
-import { db } from "lib/superbase/db";
+import { db } from "@/lib/superbase/db";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 /**
- * 1. DEFINISI TIPE DATA (Type Safety)
+ * 1. DEFINISI TIPE DATA
  */
 interface SanityImage {
   _type: "image";
@@ -82,27 +82,6 @@ export default function ImageSlider({
     }
   }, []);
 
-  /* sanity
-  const checkUnlockStatus = async (userEmail: string) => {
-    try {
-      const res = await fetch("/api/check-unlock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: userEmail, contentId }),
-      });
-      const data = await res.json();
-      if (data.unlocked) {
-        setHasPaid(true);
-        setShowModal(false);
-      }
-      return data.unlocked;
-    } catch (err) {
-      console.error("Gagal cek status:", err);
-      return false;
-    }
-  };
-  */
-
   const checkUnlockStatus = async (userEmail: string) => {
     try {
       const { data, error } = await db
@@ -145,22 +124,6 @@ export default function ImageSlider({
     setModalStep("checking");
 
     try {
-      /*Sanity 
-      const res = await fetch("/api/check-unlock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, contentId }),
-      });
-      const checkData = await res.json();
-
-      if (checkData.unlocked) {
-        setHasPaid(true);
-        setModalStep("success");
-        setTimeout(() => setShowModal(false), 1500);
-        return;
-      }
-    */
-      // 1. CHECKSTATUS VIA SUPABASE
       const { data: purchase, error: dbError } = await db
         .from("products")
         .select("status")
@@ -171,13 +134,13 @@ export default function ImageSlider({
 
       if (dbError) throw dbError;
 
-      // validation data
       if (purchase) {
         setHasPaid(true);
         setModalStep("success");
         setTimeout(() => setShowModal(false), 1500);
         return;
       }
+
       setModalStep("paying");
       const checkoutRes = await fetch("/api/checkout", {
         method: "POST",
@@ -188,9 +151,9 @@ export default function ImageSlider({
       if (!checkoutData.token) throw new Error("Token tidak ada");
 
       window.snap.pay(checkoutData.token, {
-        onSuccess: async (result) => {
+        onSuccess: async () => {
           try {
-            const { error: insertError } = await db.from("products").insert([
+            await db.from("products").insert([
               {
                 email: email.toLowerCase(),
                 content_id: contentId,
@@ -199,24 +162,12 @@ export default function ImageSlider({
                 status: "paid",
               },
             ]);
-
-            if (insertError) {
-              console.error("Gagal Insert ke Supabase:", insertError);
-              throw insertError;
-            }
-
-            const verified = await checkUnlockStatus(email);
-            if (verified) {
-              setModalStep("success");
-              setHasPaid(true);
-              setTimeout(() => setShowModal(false), 1500);
-            }
+            setHasPaid(true);
+            setModalStep("success");
+            setTimeout(() => setShowModal(false), 1500);
           } catch (err) {
-            console.error("Error setelah bayar:", err);
             setModalStep("error");
-            setErrorMessage(
-              "Pembayaran berhasil, tapi gagal mencatat akses. Silakan screenshot halaman ini dan hubungi Admin.",
-            );
+            setErrorMessage("Gagal mencatat akses. Hubungi Admin.");
           }
         },
         onPending: () => {
@@ -232,7 +183,6 @@ export default function ImageSlider({
         },
       });
     } catch (err) {
-      console.error("Error:", err);
       setModalStep("error");
       setErrorMessage("Terjadi kesalahan. Silakan coba lagi.");
     }
@@ -389,7 +339,7 @@ export default function ImageSlider({
         `}</style>
       </div>
 
-      {/* DOWNLOAD MODAL */}
+      {/* MODAL DOWNLOAD */}
       {showDownloadModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xs p-8 relative">
@@ -399,7 +349,6 @@ export default function ImageSlider({
             >
               <X size={20} />
             </button>
-
             <div className="text-center mb-6">
               <div className="w-12 h-12 bg-orange-100 text-[#FF6B35] rounded-full flex items-center justify-center mx-auto mb-3">
                 <svg
@@ -425,165 +374,124 @@ export default function ImageSlider({
                 Mau disimpan dalam format apa?
               </p>
             </div>
-
             <div className="flex flex-col gap-3">
               <button
-                onClick={async () => {
-                  setShowDownloadModal(false);
-                  await handleDownloadAll("jpg");
-                }}
-                disabled={isDownloading}
-                className="w-full flex items-center gap-4 border-2 border-gray-100 hover:border-[#FF6B35] rounded-2xl p-4 transition-all text-left disabled:opacity-50"
+                onClick={() => handleDownloadAll("jpg")}
+                className="w-full flex items-center gap-4 border-2 border-gray-100 hover:border-[#FF6B35] rounded-2xl p-4 transition-all"
               >
-                <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
-                  <span className="text-blue-500 font-bold text-xs">JPG</span>
+                <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center shrink-0 text-blue-500 font-bold text-xs">
+                  JPG
                 </div>
                 <div>
                   <p className="font-bold text-[#0B1E3F] text-sm">Gambar JPG</p>
-                  <p className="text-gray-400 text-xs">
-                    Setiap slide tersimpan terpisah
-                  </p>
+                  <p className="text-gray-400 text-xs">Slide terpisah</p>
                 </div>
               </button>
-
               <button
-                onClick={async () => {
-                  setShowDownloadModal(false);
-                  await handleDownloadAll("zip");
-                }}
-                disabled={isDownloading}
-                className="w-full flex items-center gap-4 border-2 border-gray-100 hover:border-[#FF6B35] rounded-2xl p-4 transition-all text-left disabled:opacity-50"
+                onClick={() => handleDownloadAll("zip")}
+                className="w-full flex items-center gap-4 border-2 border-gray-100 hover:border-[#FF6B35] rounded-2xl p-4 transition-all"
               >
-                <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center shrink-0">
-                  <span className="text-[#FF6B35] font-bold text-xs">ZIP</span>
+                <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center shrink-0 text-[#FF6B35] font-bold text-xs">
+                  ZIP
                 </div>
                 <div>
                   <p className="font-bold text-[#0B1E3F] text-sm">File ZIP</p>
-                  <p className="text-gray-400 text-xs">
-                    Semua slide dalam 1 file
-                  </p>
+                  <p className="text-gray-400 text-xs">Semua dalam 1 file</p>
                 </div>
               </button>
             </div>
-
-            {isDownloading && (
-              <div className="flex items-center justify-center gap-2 mt-4 text-[#FF6B35]">
-                <Loader2 size={16} className="animate-spin" />
-                <span className="text-sm font-semibold">
-                  Sedang mengunduh...
-                </span>
-              </div>
-            )}
           </div>
         </div>
       )}
 
-      {/* CHECKOUT MODAL */}
+      {/* MODAL CHECKOUT (SESUAI GAMBAR) */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-sm p-8 relative">
-            {(modalStep === "email" || modalStep === "error") && (
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-              >
-                <X size={20} />
-              </button>
-            )}
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-sm p-10 relative animate-in fade-in zoom-in duration-300">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-6 right-6 text-gray-300 hover:text-gray-500 transition-colors"
+            >
+              <X size={24} />
+            </button>
 
             {modalStep === "email" && (
-              <>
-                <div className="w-12 h-12 bg-orange-100 text-[#FF6B35] rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Mail size={22} />
+              <div className="flex flex-col items-center">
+                {/* Icon Wrapper */}
+                <div className="w-16 h-16 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center mb-6 border border-orange-100">
+                  <Mail size={28} strokeWidth={2.5} />
                 </div>
-                <h3 className="text-[#0B1E3F] font-bold text-lg text-center mb-1">
+
+                <h3 className="text-[#0B1E3F] font-extrabold text-xl mb-2 text-center">
                   Masukkan Email Kamu
                 </h3>
-                <p className="text-gray-400 text-xs text-center mb-6">
+                <p className="text-gray-400 text-[13px] leading-relaxed text-center mb-8 px-2">
                   Kami akan cek apakah kamu sudah pernah membeli materi ini.
                 </p>
-                {errorMessage && (
-                  <div className="bg-orange-50 border border-orange-200 text-orange-600 text-xs rounded-xl px-4 py-3 mb-4 text-center">
-                    {errorMessage}
-                  </div>
-                )}
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleEmailSubmit()}
-                  placeholder="nama@gmail.com"
-                  className={`w-full border rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-orange-300 transition-all ${
-                    emailError ? "border-red-400" : "border-gray-200"
-                  }`}
-                />
-                {emailError && (
-                  <p className="text-red-400 text-xs mt-2">{emailError}</p>
-                )}
-                <button
-                  onClick={handleEmailSubmit}
-                  className="w-full mt-4 bg-[#FF6B35] text-white font-bold py-3.5 rounded-full hover:bg-[#0B1E3F] transition-all"
-                >
-                  Lanjutkan
-                </button>
-              </>
-            )}
 
-            {modalStep === "checking" && (
-              <div className="text-center py-4">
-                <Loader2
-                  size={36}
-                  className="animate-spin text-[#FF6B35] mx-auto mb-4"
-                />
-                <p className="font-semibold text-[#0B1E3F]">
-                  Mengecek status...
-                </p>
-                <p className="text-gray-400 text-xs mt-1">
-                  Mohon tunggu sebentar
-                </p>
+                <div className="w-full space-y-4">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="nama@gmail.com"
+                    className={`w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm text-[#0B1E3F] placeholder:text-gray-300 outline-none focus:border-orange-200 focus:ring-4 focus:ring-orange-50 transition-all text-center font-medium ${emailError ? "border-red-200" : ""}`}
+                  />
+
+                  {emailError && (
+                    <p className="text-red-500 text-[11px] text-center font-bold">
+                      {emailError}
+                    </p>
+                  )}
+                  {errorMessage && (
+                    <p className="text-red-500 text-[11px] text-center font-bold">
+                      {errorMessage}
+                    </p>
+                  )}
+
+                  <button
+                    onClick={handleEmailSubmit}
+                    className="w-full bg-[#C05638] text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-[#a84a2f] active:scale-95 transition-all text-sm uppercase tracking-wide"
+                  >
+                    Lanjutkan
+                  </button>
+                </div>
               </div>
             )}
 
-            {modalStep === "paying" && (
-              <div className="text-center py-4">
+            {/* Loading / Success States */}
+            {(modalStep === "checking" || modalStep === "paying") && (
+              <div className="py-10 flex flex-col items-center">
                 <Loader2
-                  size={36}
-                  className="animate-spin text-[#FF6B35] mx-auto mb-4"
+                  size={40}
+                  className="animate-spin text-orange-500 mb-4"
                 />
-                <p className="font-semibold text-[#0B1E3F]">
-                  Membuka halaman pembayaran...
-                </p>
-                <p className="text-gray-400 text-xs mt-1">Sebentar ya</p>
+                <p className="font-bold text-[#0B1E3F]">Sedang diproses...</p>
               </div>
             )}
 
             {modalStep === "success" && (
-              <div className="text-center py-4">
-                <CheckCircle
-                  size={48}
-                  className="text-green-500 mx-auto mb-4"
-                />
-                <p className="font-bold text-[#0B1E3F] text-lg">
-                  Akses Terbuka! 🎉
-                </p>
-                <p className="text-gray-400 text-xs mt-2">
-                  Semua slide sudah bisa dilihat
-                </p>
+              <div className="py-10 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle size={32} />
+                </div>
+                <h3 className="font-bold text-[#0B1E3F] text-lg">
+                  Akses Terbuka!
+                </h3>
+                <p className="text-gray-400 text-xs mt-2">Selamat belajar!</p>
               </div>
             )}
 
             {modalStep === "error" && (
-              <div className="text-center py-4">
-                <div className="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <X size={24} />
+              <div className="py-10 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-4">
+                  <X size={32} />
                 </div>
-                <p className="font-bold text-[#0B1E3F]">Oops!</p>
-                <p className="text-gray-400 text-xs mt-2 mb-6">
-                  {errorMessage}
-                </p>
+                <p className="font-bold text-[#0B1E3F]">{errorMessage}</p>
                 <button
                   onClick={() => setModalStep("email")}
-                  className="w-full bg-[#FF6B35] text-white font-bold py-3 rounded-full hover:bg-[#0B1E3F] transition-all"
+                  className="mt-4 text-orange-500 text-sm font-bold underline"
                 >
                   Coba Lagi
                 </button>
