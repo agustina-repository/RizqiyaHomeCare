@@ -29,14 +29,15 @@ const FooterSection = () => {
       <div className="absolute -top-32 -right-32 w-[400px] h-[400px] bg-red-600/10 rounded-full blur-[120px]" />
 
       <div className="relative container mx-auto px-6 flex flex-col md:flex-row justify-between pt-20 pb-24 gap-12">
-        <div className="brightness-110 contrast-110">
+        <div className="brightness-0 invert opacity-80 hover:opacity-100 transition-opacity">
           <Image
-            src="/images/logo-rhc.png"
+            src="/images/header-img.png"
             alt="logo rhc footer"
             width={187}
             height={44}
+            className="object-contain"
           />
-          <p className="mt-6 text-amber-400/90 text-[12px] leading-relaxed tracking-wide font-light max-w-[250px]">
+          <p className="mt-8 text-sm text-amber-400/90 leading-relaxed tracking-wider font-light md:whitespace-nowrap max-w-full">
             Perawatan terbaik dengan kepedulian dan ketulusan, sigap hadir di
             rumah Anda.
           </p>
@@ -44,7 +45,7 @@ const FooterSection = () => {
 
         <div className="grid grid-cols-2 gap-8 md:gap-16">
           <div className="flex flex-col gap-3">
-            <h4 className="text-sm font-bold text-rose-300 mb-2 uppercase tracking-widest">
+            <h4 className="text-sm font-bold text-amber-400 mb-2 uppercase tracking-widest">
               Navigation
             </h4>
             {quickLinks.map((link) => (
@@ -83,7 +84,7 @@ const FooterSection = () => {
           </div>
 
           <div className="flex flex-col gap-3">
-            <h4 className="text-sm font-bold text-rose-300 mb-2 uppercase tracking-widest">
+            <h4 className="text-sm font-bold text-amber-400 mb-2 uppercase tracking-widest">
               Connect
             </h4>
             {socialLinks.map((social) => (

@@ -2,9 +2,10 @@
 
 export default function VipTrust() {
   const vvipClients = [
-    { id: 1, img: "/images/vip/vip1.png" },
+    { id: 1, img: "/images/vip/vip.jpeg" },
     { id: 2, img: "/images/vip/vip2.png" },
-    { id: 3, img: "/images/vip/vip3.png" },
+    { id: 3, img: "/images/vip/vip6.jpeg" },
+    { id: 6, img: "/images/vip/vip3.png" },
     { id: 4, img: "/images/vip/vip4.png" },
     { id: 5, img: "/images/vip/vip5.png" },
   ];
